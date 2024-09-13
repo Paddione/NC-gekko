@@ -6,10 +6,11 @@ services:
     network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /home/gekko/NC-gekko/traefik/data/traefik.yml:/etc/traefik/traefik.yml:ro
-      - /home/gekko/NC-gekko/traefik/data/config.yml:/etc/traefik/config.yml:ro
+      - /home/gekko/NC-gekko/traefik/data/traefik.yml:/traefik.yml:ro
+      - /home/gekko/NC-gekko/traefik/data/conf:/conf:ro
       - /home/gekko/NC-gekko/traefik/data/letsencrypt:/letsencrypt
-      - /home/gekko/NC-gekko/traefik/data/traefik.log:/var/log/traefik.log
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CF_API_KEY=${CF_API_KEY}
+    command:
+      - "--configfile=/traefik.yml"

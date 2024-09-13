@@ -4,29 +4,27 @@ global:
 
 log:
   level: DEBUG
-  filePath: /var/log/traefik.log
 
 api:
   dashboard: true
-  debug: true
+  insecure: false
 
 entryPoints:
-  http:
+  web:
     address: ":80"
     http:
       redirections:
         entryPoint:
-          to: https
+          to: websecure
           scheme: https
-  https:
+  websecure:
     address: ":443"
 
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-  file:
-    filename: /etc/traefik/config.yml
+    network: host  # Use this if your containers are using host network mode
 
 certificatesResolvers:
   cloudflare:
@@ -37,4 +35,28 @@ certificatesResolvers:
         provider: cloudflare
         resolvers:
           - "1.1.1.1:53"
-          - "1.0.0.0:53"
+          - "1.0.0.1:53"
+
+http:
+  middlewares:
+    nextcloud-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+
+  routers:
+    nextcloud:
+      rule: "Host(`nextcloud.mentolder.de`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - nextcloud-headers
+      service: nextcloud
+      tls:
+        certResolver: cloudflare
+
+  services:
+    nextcloud:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:11000"
