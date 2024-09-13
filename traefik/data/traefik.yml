@@ -28,8 +28,8 @@ providers:
 certificatesResolvers:
   cloudflare:
     acme:
-      email: ${CF_API_EMAIL}
-      storage: /home/patrick/nextcloud-docker/Compose/traefik/config/nextcloud.yaml
+      email: p.korczewski@gmail.com
+      storage: /letsencrypt/acme.json
       dnsChallenge:
         provider: cloudflare
         resolvers:
