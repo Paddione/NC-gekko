@@ -1,12 +1,15 @@
 global:
   checkNewVersion: true
   sendAnonymousUsage: false
+
 log:
-  level: INFO
-  filePath: /traefik.log
+  level: DEBUG
+  filePath: /var/log/traefik.log
+
 api:
   dashboard: true
   debug: true
+
 entryPoints:
   http:
     address: ":80"
@@ -17,14 +20,14 @@ entryPoints:
           scheme: https
   https:
     address: ":443"
-serversTransport:
-  insecureSkipVerify: true
+
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
   file:
-    filename: /config.yml
+    filename: /etc/traefik/config.yml
+
 certificatesResolvers:
   cloudflare:
     acme:

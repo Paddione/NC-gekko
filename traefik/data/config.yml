@@ -1,25 +1,10 @@
 http:
-  routers:
-    nextcloud:
-      rule: "Host(`nextcloud.mentolder.de.TLS`)"
-      entrypoints:
-        - "https"
-      service: nextcloud
-      middlewares:
-        - https-redirect
-        - nextcloud-secure-headers
-      tls:
-        domains:
-          - main: "nextcloud.mentolder.de.TLS"
-
-  services:
-    nextcloud:
-      loadBalancer:
-        servers:
-          - url: "http://10.0.0.3:11000"
-        passHostHeader: true
-
   middlewares:
+    https-redirect:
+      redirectscheme:
+        scheme: https
+        permanent: true
+
     nextcloud-secure-headers:
       headers:
         hostsProxyHeaders:
@@ -27,8 +12,3 @@ http:
         referrerPolicy: "same-origin"
         customResponseHeaders:
           X-Robots-Tag: "none"
-
-    https-redirect:
-      redirectscheme:
-        scheme: https
-        permanent: true

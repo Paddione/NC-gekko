@@ -2,7 +2,7 @@ docker network create -d bridge traefik-proxy
 
 docker compose -f /home/gekko/NC-gekko/traefik/traefik-compose.yml up -d
 docker compose -f /home/gekko/NC-gekko/nextcloud/nextcloud-compose.yml up -d
-
+cat /var/log/traefik.log
 docker compose up -d
 
 |-- NC-gekko
