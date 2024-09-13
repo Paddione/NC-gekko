@@ -1,3 +1,4 @@
 /traefik/.env
 /.idea/
 /traefik/data/letsencrypt/acme.json
+/.env
