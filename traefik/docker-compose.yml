@@ -23,8 +23,8 @@ services:
       - traefik.docker.network=traefik-proxy
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.tls.certresolver=cloudflare
-      - traefik.http.routers.traefik.tls.domains[0].main=
-      - traefik.http.routers.traefik.tls.domains[0].sans=*.
+      - traefik.http.routers.traefik.tls.domains[0].main=mentolder.de
+      - traefik.http.routers.traefik.tls.domains[0].sans=*.mentolder.de
       - traefik.http.routers.traefik.service=api@internal
 networks:
   traefik-proxy:
