@@ -8,8 +8,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/gekko/NC-gekko/traefik/data/traefik.yml:/traefik.yml:ro
-      - /home/gekko/NC-gekko/traefik/data/conf:/conf:ro
-      - /home/gekko/NC-gekko/traefik/data/letsencrypt:/letsencrypt
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CF_API_KEY=${CF_API_KEY}
