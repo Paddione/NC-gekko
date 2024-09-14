@@ -2,3 +2,4 @@
 /.idea/
 /traefik/data/letsencrypt/acme.json
 /.env
+/cloudflared-tun/
