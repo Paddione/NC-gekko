@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik_net
+      - cloudflare_tunnel_net
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/gekko/NC-gekko/traefik/data/traefik.yml:/traefik.yml:ro
@@ -16,9 +17,18 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
     ports:
       - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.http.routers.traefik.rule=Host(`traefik.mentolder.de`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.service=api@internal"
 
 networks:
   traefik_net:
+    external: true
+  cloudflare_tunnel_net:
     external: true

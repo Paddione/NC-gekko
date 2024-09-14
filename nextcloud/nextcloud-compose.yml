@@ -12,13 +12,19 @@ services:
       - APACHE_PORT=11000
       - APACHE_IP_BINDING=127.0.0.1
       - AIO_DISABLE_HTTPS=true
+      - TRUSTED_PROXIES=172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
+      - OVERWRITEPROTOCOL=https
+      - OVERWRITEHOST=nextcloud.mentolder.de
+      - OVERWRITEWEBROOT=/
+      - OVERWRITECONDADDR=172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
     labels:
       - traefik.enable=true
       - traefik.http.routers.nextcloud.rule=Host(`nextcloud.mentolder.de`)
       - traefik.http.routers.nextcloud.entrypoints=https
       - traefik.http.routers.nextcloud.tls=true
       - traefik.http.services.nextcloud.loadbalancer.server.port=11000
-
+    ports:
+      - "8080:8080"
 volumes:
   nextcloud_aio_mastercontainer:
     name: nextcloud_aio_mastercontainer
