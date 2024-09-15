@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Unnamed" type="ShConfigurationType" nameIsGenerated="true">
-    <option name="SCRIPT_TEXT" value="docker network create -d bridge traefik-proxy " />
+  <configuration default="false" name="CreateTraefikNetwork" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="docker network create -d bridge traefik_net " />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />

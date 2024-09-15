@@ -3,3 +3,4 @@
 /traefik/data/letsencrypt/acme.json
 /.env
 /cloudflared-tun/
+/secrets/

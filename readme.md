@@ -28,3 +28,4 @@ docker compose up -d
 |-- traefik.log
 `-- traefik.yml
 
+<img height="200" width="200"/>

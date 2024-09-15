@@ -12,3 +12,8 @@ chmod +x ~/.docker/cli-plugins/docker-compose
 echo "Logout and then log back in to make the user account group active"
 
 #sudo nano /etc/docker/daemon.json
+
+{
+  "ipv6": true,
+  "fixed-cidr-v6": "fd00::/80"
+}
