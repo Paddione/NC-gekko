@@ -3,7 +3,7 @@ services:
     image: cloudflare/cloudflared:latest
     command: tunnel run
     environment:
-      - TunnelTokenFile=${TUNNEL_TOKEN_FILE}
+      - TunnelToken=${TUNNEL_TOKEN_FILE}
     volumes:
       - ./config:/etc/cloudflared
     networks:
