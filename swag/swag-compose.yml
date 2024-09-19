@@ -23,7 +23,7 @@ services:
       - ONLY_SUBDOMAINS=false
       - VALIDATION=none
     volumes:
-      - /home/patrick/NC-gekko/swag/config:/config
+      - /home/patrick/NC-gekko/swag/config:/config/nginx/proxy-confs/nextcloud.subdomain.conf
       - /home/patrick/NC-gekko/swag/origin-certificates:/config/etc/letsencrypt/live/korczewski.de:ro
     restart: unless-stopped
     networks:
