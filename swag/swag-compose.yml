@@ -1,0 +1,44 @@
+---
+version: '3'
+services:
+  swag:
+    image: lscr.io/linuxserver/swag:latest
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - URL=korczewski.de
+      - VALIDATION=http
+      - SUBDOMAINS=wildcard
+      - EMAIL=p.korczewski@gmail.com
+      - SSL_CERT_COUNTRY=DE
+      - SSL_CERT_STATE=YourState
+      - SSL_CERT_LOCALITY=YourCity
+      - SSL_CERT_ORGANIZATION=YourOrganization
+      - SSL_CERT_ORGANIZATIONAL_UNIT=YourUnit
+      - SSL_CERT_COMMON_NAME=korczewski.de
+      - ONLY_SUBDOMAINS=false
+      - VALIDATION=none
+    volumes:
+      - /home/patrick/NC-gekko/swag/config:/config
+      - /home/patrick/NC-gekko/swag/origin-certificates:/config/etc/letsencrypt/live/korczewski.de:ro
+    restart: unless-stopped
+    networks:
+      - docker_public_net
+  nextcloud:
+      image: lscr.io/linuxserver/nextcloud:latest
+      container_name: nextcloud
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=Europe/Berlin
+      volumes:
+        - /path/to/nextcloud/config:/config
+        - /path/to/data:/data
+      restart: unless-stopped
+networks:
+  docker_public_net:
+    external: true

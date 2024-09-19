@@ -1,3 +1,20 @@
+networks:
+beef:
+enable_ipv6: true
+driver: bridge
+driver_opts:
+com.docker.network.enable_ipv6: "true"
+ipam:
+driver: default
+config:
+- subnet: 2001:3984:3989::/64
+
+docker network create -d macvlan \
+--subnet=10.0.0.0/8 \
+--gateway=1.0.0.1 \
+-o parent=eth0.1 \
+macvlan4
+
 docker network create -d bridge traefik-proxy 
 
 docker compose -f /home/gekko/NC-gekko/traefik/traefik-compose.yml up -d

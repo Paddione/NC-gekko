@@ -1,4 +1,4 @@
-tunnel: ${TUNNEL_TOKEN_File}
+tunnel: 7153cc23-96d9-46d0-be4e-8f3fcfd18334
 ingress:
   - hostname: nextcloud.mentolder.de
     service: http://traefik:80
