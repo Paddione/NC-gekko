@@ -1,5 +1,3 @@
----
-version: '3'
 services:
   swag:
     image: lscr.io/linuxserver/swag:latest
@@ -11,34 +9,42 @@ services:
       - PGID=1000
       - TZ=Europe/Berlin
       - URL=korczewski.de
-      - VALIDATION=http
+      - VALIDATION=dns
+      - DNSPLUGIN=cloudflare
       - SUBDOMAINS=wildcard
-      - EMAIL=p.korczewski@gmail.com
-      - SSL_CERT_COUNTRY=DE
-      - SSL_CERT_STATE=YourState
-      - SSL_CERT_LOCALITY=YourCity
-      - SSL_CERT_ORGANIZATION=YourOrganization
-      - SSL_CERT_ORGANIZATIONAL_UNIT=YourUnit
-      - SSL_CERT_COMMON_NAME=korczewski.de
       - ONLY_SUBDOMAINS=false
-      - VALIDATION=none
+      - EMAIL=p.korczewski@gmail.com # Replace with your email
     volumes:
-      - /home/patrick/NC-gekko/swag/config:/config/nginx/proxy-confs/nextcloud.subdomain.conf
-      - /home/patrick/NC-gekko/swag/origin-certificates:/config/etc/letsencrypt/live/korczewski.de:ro
+      - /home/patrick/NC-gekko/swag/config:/config
+    ports:
+      - "443:443"
     restart: unless-stopped
     networks:
       - docker_public_net
+
   nextcloud:
-      image: lscr.io/linuxserver/nextcloud:latest
-      container_name: nextcloud
-      environment:
-        - PUID=1000
-        - PGID=1000
-        - TZ=Europe/Berlin
-      volumes:
-        - /path/to/nextcloud/config:/config
-        - /path/to/data:/data
-      restart: unless-stopped
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - /home/patrick/NC-gekko/nextcloud/config:/config
+      - /home/patrick/NC-gekko/nextcloud/data:/data
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - docker_public_net
+
 networks:
   docker_public_net:
-    external: true
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+        - subnet: 2a0f:ff00:2dc:1fd::/64
+          gateway: 2a0f:ff00:2dc:1fd::1

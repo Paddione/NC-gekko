@@ -1,3 +1,9 @@
+# launch portainer
+docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+
+
+docker network create --ipv6 --subnet 2a0f:ff00:238:5500::/56 --gateway 2a0f:ff00:238:5500::1 docker_public_net
+
 networks:
 beef:
 enable_ipv6: true
