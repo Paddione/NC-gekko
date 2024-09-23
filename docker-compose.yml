@@ -1,24 +1,26 @@
+version: '3.8'
+
 services:
   nextcloud:
     extends:
       file: ./nextcloud/nextcloud-compose.yml
       service: nextcloud
     networks:
-      - docker_public_net
+      - nextcloud_network
 
   db:
     extends:
       file: ./nextcloud/nextcloud-compose.yml
       service: db
     networks:
-      - docker_public_net
+      - nextcloud_network
 
   redis:
     extends:
       file: ./nextcloud/nextcloud-compose.yml
       service: redis
     networks:
-      - docker_public_net
+      - nextcloud_network
 
   coturn:
     extends:
@@ -32,6 +34,7 @@ services:
       service: swag
     networks:
       - docker_public_net
+      - nextcloud_network
 
 networks:
   docker_public_net:
@@ -39,24 +42,9 @@ networks:
     enable_ipv6: true
     ipam:
       config:
-        - subnet: 172.20.0.0/16
-          gateway: 172.20.0.1
-        - subnet: 2a0f:ff00:2dc:1fd::/64
-          gateway: 2a0f:ff00:2dc:1fd::1
-
-secrets:
-  nextcloud_mysql_password:
-    file: ./.secrets
-    name: NEXTCLOUD_MYSQL_PASSWORD
-  mysql_root_password:
-    file: ./.secrets
-    name: MYSQL_ROOT_PASSWORD
-  mysql_password:
-    file: ./.secrets
-    name: MYSQL_PASSWORD
-  cloudflare_email:
-    file: ./.secrets
-    name: CLOUDFLARE_EMAIL
-  cloudflare_api_key:
-    file: ./.secrets
-    name: CLOUDFLARE_API_KEY
+        - subnet: ${NEXTCLOUD_NETWORK_SUBNET_IPV4}
+          gateway: ${NEXTCLOUD_NETWORK_GATEWAY_IPV4}
+        - subnet: ${NEXTCLOUD_NETWORK_SUBNET_IPV6}
+          gateway: ${NEXTCLOUD_NETWORK_GATEWAY_IPV6}
+  nextcloud_network:
+    driver: bridge
