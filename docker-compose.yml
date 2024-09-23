@@ -1,0 +1,62 @@
+services:
+  nextcloud:
+    extends:
+      file: ./nextcloud/nextcloud-compose.yml
+      service: nextcloud
+    networks:
+      - docker_public_net
+
+  db:
+    extends:
+      file: ./nextcloud/nextcloud-compose.yml
+      service: db
+    networks:
+      - docker_public_net
+
+  redis:
+    extends:
+      file: ./nextcloud/nextcloud-compose.yml
+      service: redis
+    networks:
+      - docker_public_net
+
+  coturn:
+    extends:
+      file: ./nextcloud/nextcloud-compose.yml
+      service: coturn
+    network_mode: host
+
+  swag:
+    extends:
+      file: ./swag/swag-compose.yml
+      service: swag
+    networks:
+      - docker_public_net
+
+networks:
+  docker_public_net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+        - subnet: 2a0f:ff00:2dc:1fd::/64
+          gateway: 2a0f:ff00:2dc:1fd::1
+
+secrets:
+  nextcloud_mysql_password:
+    file: ./.secrets
+    name: NEXTCLOUD_MYSQL_PASSWORD
+  mysql_root_password:
+    file: ./.secrets
+    name: MYSQL_ROOT_PASSWORD
+  mysql_password:
+    file: ./.secrets
+    name: MYSQL_PASSWORD
+  cloudflare_email:
+    file: ./.secrets
+    name: CLOUDFLARE_EMAIL
+  cloudflare_api_key:
+    file: ./.secrets
+    name: CLOUDFLARE_API_KEY

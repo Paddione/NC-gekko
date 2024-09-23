@@ -1,0 +1,80 @@
+services:
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    volumes:
+      - ${NEXTCLOUD_HTML_VOLUME}:/var/www/html
+      - ${NEXTCLOUD_CUSTOM_APPS_VOLUME}:/var/www/html/custom_apps
+      - ${NEXTCLOUD_CONFIG_VOLUME}:/var/www/html/config
+      - ${NEXTCLOUD_DATA_VOLUME}:/var/www/html/data
+    environment:
+      - MYSQL_HOST=${NEXTCLOUD_MYSQL_HOST}
+      - MYSQL_DATABASE=${NEXTCLOUD_MYSQL_DATABASE}
+      - MYSQL_USER=${NEXTCLOUD_MYSQL_USER}
+      - REDIS_HOST=${NEXTCLOUD_REDIS_HOST}
+      - TRUSTED_PROXIES=${NEXTCLOUD_TRUSTED_PROXIES}
+    secrets:
+      - nextcloud_mysql_password
+    depends_on:
+      - db
+      - redis
+    networks:
+      - nextcloud_network
+
+  db:
+    image: mariadb:10.5
+    container_name: nextcloud_db
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - ${DB_VOLUME}:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+    secrets:
+      - mysql_root_password
+      - mysql_password
+    networks:
+      - nextcloud_network
+
+  redis:
+    image: redis:alpine
+    container_name: nextcloud_redis
+    restart: unless-stopped
+    networks:
+      - nextcloud_network
+
+  coturn:
+    image: coturn/coturn
+    container_name: nextcloud_coturn
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ${COTURN_VOLUME}:/etc/coturn
+    command: ["-n", "--log-file=stdout", "--external-ip=$(detect-external-ip)", "--realm=${COTURN_REALM}", "--server-name=${COTURN_SERVER_NAME}", "--lt-cred-mech", "--fingerprint", "--no-multicast-peers", "--min-port=49160", "--max-port=49200"]
+    environment:
+      - DETECT_EXTERNAL_IP=1
+      - DETECT_RELAY_IP=1
+      - DETECT_EXTERNAL_IP_COMMAND=detect-external-ip
+
+networks:
+  nextcloud_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${NEXTCLOUD_NETWORK_SUBNET_IPV4}
+          gateway: ${NEXTCLOUD_NETWORK_GATEWAY_IPV4}
+        - subnet: ${NEXTCLOUD_NETWORK_SUBNET_IPV6}
+          gateway: ${NEXTCLOUD_NETWORK_GATEWAY_IPV6}
+
+secrets:
+  nextcloud_mysql_password:
+    file: .secrets
+    name: NEXTCLOUD_MYSQL_PASSWORD
+  mysql_root_password:
+    file: .secrets
+    name: MYSQL_ROOT_PASSWORD
+  mysql_password:
+    file: .secrets
+    name: MYSQL_PASSWORD

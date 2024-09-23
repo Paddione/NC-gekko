@@ -13,31 +13,15 @@ services:
       - DNSPLUGIN=cloudflare
       - SUBDOMAINS=wildcard
       - ONLY_SUBDOMAINS=false
-      - EMAIL=p.korczewski@gmail.com # Replace with your email
+      - EMAIL=p.korczewski@gmail.com
     volumes:
       - /home/patrick/NC-gekko/swag/config:/config
     ports:
       - "443:443"
+      - "80:80"  # Added to handle HTTP traffic
     restart: unless-stopped
     networks:
       - docker_public_net
-
-  nextcloud:
-    image: lscr.io/linuxserver/nextcloud:latest
-    container_name: nextcloud
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Berlin
-    volumes:
-      - /home/patrick/NC-gekko/nextcloud/config:/config
-      - /home/patrick/NC-gekko/nextcloud/data:/data
-    ports:
-      - "8080:8080"
-    restart: unless-stopped
-    networks:
-      - docker_public_net
-
 networks:
   docker_public_net:
     driver: bridge
