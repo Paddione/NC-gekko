@@ -1,27 +1,25 @@
-version: '3.8'
-
-services:
-  swag:
-    image: lscr.io/linuxserver/swag:latest
-    container_name: swag
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - URL=${SWAG_URL}
-      - SUBDOMAINS=${SWAG_SUBDOMAINS}
-      - VALIDATION=${SWAG_VALIDATION}
-      - DNSPLUGIN=${SWAG_DNSPLUGIN}
-      - ONLY_SUBDOMAINS=false
-      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
-      - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
-    volumes:
-      - ${SWAG_CONFIG_VOLUME}:/config
-    ports:
-      - "5349:5349"
-      - "3478:3478/udp"
-      - "443:443"
-      - "80:80"
-    restart: unless-stopped
+swag:
+  image: lscr.io/linuxserver/swag:latest
+  container_name: swag
+  cap_add:
+    - NET_ADMIN
+  environment:
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - TZ=${TZ}
+    - URL=${SWAG_URL}
+    - SUBDOMAINS=${SWAG_SUBDOMAINS}
+    - VALIDATION=${SWAG_VALIDATION}
+    - DNSPLUGIN=${SWAG_DNSPLUGIN}
+    - ONLY_SUBDOMAINS=false
+    - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+    - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
+  volumes:
+    - ${SWAG_CONFIG_VOLUME}:/config
+  ports:
+    - "443:443"
+    - "80:80"
+  restart: unless-stopped
+  networks:
+    - nextcloud_network
+    - docker_public_net
