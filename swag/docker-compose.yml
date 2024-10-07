@@ -1,0 +1,24 @@
+services:
+  swag:
+    image: lscr.io/linuxserver/swag:latest
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - URL=korczewski.de
+      - SUBDOMAINS=wildcard
+      - VALIDATION=cloudflare
+    volumes:
+      - ./swag:/config
+    ports:
+      - "443:443"
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - nextcloud_network
+networks:
+  nextcloud_network:
+    driver: bridge

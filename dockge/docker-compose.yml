@@ -1,0 +1,13 @@
+services:
+  dockge:
+    container_name: dockge
+    image: louislam/dockge:latest
+    restart: unless-stopped
+    ports:
+      - 5001:5001
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/patrick/NC-gekko/dockge/data:/app/data
+      - /home/patrick/NC-gekko/dockge/stacks:/home/patrick/dockge/stacks
+    environment:
+      - DOCKGE_STACKS_DIR=/home/patrick/dockge/stacks
